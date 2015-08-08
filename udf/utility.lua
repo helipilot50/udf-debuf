@@ -1,7 +1,8 @@
 
+
 -- Print contents of `tbl`, with indentation.
 -- `indent` sets the initial level of indentation.
-local function tprint (tbl, indent)
+function tprint (tbl, indent)
   if not indent then indent = 0 end
   for k, v in pairs(tbl) do
     formatting = string.rep("  ", indent) .. k .. ": "
@@ -14,7 +15,23 @@ local function tprint (tbl, indent)
   end
 end
 -- debug routing to print the local heap
-local function dumpLocal()
+
+function dumpRecord (rec)
+  info("record:")
+  info(tostring(record.setname(rec))..":"..tostring(record.digest(rec))..
+            ":(gen:"..tostring(record.gen(rec))..")"..
+            ",(exp:"..tostring(record.ttl(rec))..")")
+  info(" bins:")
+  local names = record.bin_names(rec)
+  for k, v in pairs(names) do
+    local binVal = rec[v]
+    info("  (" .. v .. ":"..tostring(binVal)..")")
+  end
+end
+
+
+
+function dumpLocal()
   local i = 1 
   repeat
         local name, value = ldebug.getlocal(2, i)
